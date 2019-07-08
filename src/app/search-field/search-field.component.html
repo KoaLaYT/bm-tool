@@ -1,0 +1,10 @@
+<mat-form-field>
+  <input matInput placeholder="文件夹路径" [formControl]="emailFormControl"
+         [errorStateMatcher]="matcher">
+  <mat-error *ngIf="emailFormControl.hasError('pattern') && !emailFormControl.hasError('required')">
+    文件夹路径必须以'\'结尾
+  </mat-error>
+  <mat-error *ngIf="emailFormControl.hasError('required')">
+    必须提供一个文件夹路径
+  </mat-error>
+</mat-form-field>

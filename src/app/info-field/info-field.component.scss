@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-form-field {
+  flex: 1 0 180px;
+  margin-right: 1em;
+}
+
+button {
+  display: block;
+  padding: 0 1em;
+}
+
+mat-option {
+  position: relative;
+}
+
+.icon-wrapper {
+  position: absolute;
+  right: 1em;
+}
+
+.icon-wrapper:hover fa-icon {
+  color: red;
+}

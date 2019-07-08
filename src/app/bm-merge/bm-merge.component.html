@@ -1,0 +1,30 @@
+<app-info-field
+  (infoChange)="isInfoValid=$event.validity; pvsTime=$event.pvsTime">
+</app-info-field>
+<app-search-field
+  (validInput)="searchFiles($event)"
+  (invalidInput)="relatedFiles=[]">
+</app-search-field>
+<div class="action-buttons">
+  <div class="button-progress-wrapper">
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!isInfoValid || !isFileValid || isRunning"
+      (click)="start()">
+      对表
+    </button>
+    <mat-progress-spinner
+      color="warn"
+      diameter="30"
+      mode="indeterminate"
+      [value]="progress"
+      *ngIf="isRunning">
+    </mat-progress-spinner>
+  </div>
+</div>
+<div class="filelist">
+  <mat-checkbox
+    *ngFor="let file of relatedFiles"
+    (change)="pickFile($event.checked, file)">{{file}}</mat-checkbox>
+</div>

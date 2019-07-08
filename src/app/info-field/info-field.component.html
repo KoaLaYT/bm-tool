@@ -1,0 +1,44 @@
+<mat-form-field>
+  <input
+    placeholder="项目名"
+    matInput
+    [formControl]="projectName"
+    [errorStateMatcher]="matcher"
+    [matAutocomplete]="auto">
+  <mat-error *ngIf="dateFormControl.hasError('required')">
+    必须提供项目名
+  </mat-error>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="sync($event.option.value)">
+    <mat-option
+      *ngFor="let project of filteredProjects | async"
+      [value]="project">
+      {{project}}
+      <span class="icon-wrapper" (click)="delete($event, project)">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </span>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+<mat-form-field>
+  <input
+    matInput
+    placeholder="PVS"
+    [formControl]="dateFormControl"
+    [errorStateMatcher]="matcher">
+  <mat-error *ngIf="dateFormControl.hasError('pattern') && !dateFormControl.hasError('required')">
+    日期格式必须为yyyy-KWww
+  </mat-error>
+  <mat-error *ngIf="dateFormControl.hasError('required')">
+    必须提供PVS时间
+  </mat-error>
+</mat-form-field>
+
+<button
+  mat-raised-button
+  color="primary"
+  [disabled]="projectName.invalid || dateFormControl.invalid">
+  保存
+</button>
