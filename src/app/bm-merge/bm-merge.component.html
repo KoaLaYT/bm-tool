@@ -1,0 +1,87 @@
+<section class="bm-merge__infos">
+  <mat-form-field class="bm-merge__project-input">
+    <input
+      placeholder="项目名"
+      matInput
+      [formControl]="projectFormControl"
+      [errorStateMatcher]="matcher"
+      [matAutocomplete]="auto">
+    <mat-error *ngIf="projectFormControl.hasError('required')">
+      必须提供项目名
+    </mat-error>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="sync($event.option.value)">
+      <mat-option
+        *ngFor="let project of filteredProjects | async"
+        [value]="project">
+        {{project}}
+        <span class="icon-wrapper" (click)="delete($event, project)">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="bm-merge__date-input">
+    <input
+      matInput
+      placeholder="PVS"
+      [formControl]="dateFormControl"
+      [errorStateMatcher]="matcher">
+    <mat-error *ngIf="dateFormControl.hasError('pattern') && !dateFormControl.hasError('required')">
+      日期格式必须为yyyy-KWww
+    </mat-error>
+    <mat-error *ngIf="dateFormControl.hasError('required')">
+      必须提供PVS时间
+    </mat-error>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="projectFormControl.invalid || dateFormControl.invalid"
+    id="save-button">
+    保存
+  </button>
+</section>
+
+<mat-form-field class="bm-merge__path-input">
+  <input
+    matInput
+    placeholder="文件夹路径"
+    [formControl]="pathFormControl"
+    [errorStateMatcher]="matcher">
+  <mat-error *ngIf="pathFormControl.hasError('pattern') && !pathFormControl.hasError('required')">
+    文件夹路径必须以'\'结尾
+  </mat-error>
+  <mat-error *ngIf="pathFormControl.hasError('required')">
+    必须提供一个文件夹路径
+  </mat-error>
+</mat-form-field>
+
+<section class="bm-merge__buttons">
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!projectFormControl.valid || !dateFormControl.valid || !isFileValid || isRunning"
+    (click)="start()">
+    对表
+  </button>
+  <mat-progress-spinner
+    color="warn"
+    diameter="30"
+    mode="indeterminate"
+    *ngIf="isRunning">
+  </mat-progress-spinner>
+  <p class="progress-info">{{info}}</p>
+</section>
+
+<section class="bm-merge__filelist">
+  <mat-checkbox
+    *ngFor="let file of relatedFiles"
+    (change)="pickFile($event.checked, file.name)">
+    <span [class]="file.tag">{{file.tag}}</span>
+    {{file.name}}
+  </mat-checkbox>
+</section>
