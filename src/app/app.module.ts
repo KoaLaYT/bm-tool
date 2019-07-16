@@ -22,11 +22,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // self defined component
 import { AppComponent } from './app.component';
 import { BmMergeComponent } from './bm-merge/bm-merge.component';
+import { BmDrawerComponent } from './bm-drawer/bm-drawer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BmMergeComponent
+    BmMergeComponent,
+    BmDrawerComponent
   ],
   imports: [
     BrowserModule,
