@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LocalStorageService {
-
   private record: string[] = [];
 
   constructor() {
@@ -19,13 +18,36 @@ export class LocalStorageService {
     return this.record;
   }
 
-  get(project: string): { pvsTime: string } {
+  get(project: string): { PVS: string } {
+    return JSON.parse(window.localStorage.getItem(project)).terminplan;
+  }
+
+  getFullProjectInfo(project: string) {
     return JSON.parse(window.localStorage.getItem(project));
   }
 
   set(project: string, pvsTime: string): void {
+    if (this.hasRecorded(project)) {
+      const previousRecord = JSON.parse(window.localStorage.getItem(project));
+      previousRecord.terminplan.PVS = pvsTime;
+      window.localStorage.setItem(project, JSON.stringify(previousRecord));
+    } else {
+      window.localStorage.setItem(project, JSON.stringify({ terminplan: { PVS: pvsTime } }));
+      this.record.push(project);
+      window.localStorage.setItem('__record__', JSON.stringify(this.record));
+    }
+  }
+
+  setFullProjectInfo(project: string, startWeek: string, endWeek: string, terminplan) {
+    window.localStorage.setItem(
+      project,
+      JSON.stringify({
+        startWeek,
+        endWeek,
+        terminplan
+      })
+    );
     if (!this.hasRecorded(project)) {
-      window.localStorage.setItem(project, JSON.stringify({pvsTime}));
       this.record.push(project);
       window.localStorage.setItem('__record__', JSON.stringify(this.record));
     }
@@ -38,11 +60,6 @@ export class LocalStorageService {
   }
 
   private hasRecorded(project: string): boolean {
-    if (this.record.filter((saved: string) => saved === project).length === 0) {
-      return false;
-    } else {
-      return true;
-    }
+    return this.record.includes(project);
   }
-
 }

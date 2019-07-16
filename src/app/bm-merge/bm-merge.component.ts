@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material';
@@ -6,7 +6,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, merge } from 'rxjs';
 import { throttleTime, startWith, map } from 'rxjs/operators';
 
 import { FileService } from '../file.service';
@@ -24,22 +24,13 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./bm-merge.component.scss']
 })
 export class BmMergeComponent implements OnInit, AfterViewInit {
-
-  public projectFormControl = new FormControl('', [
-    Validators.required
-  ]);
-  public dateFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern(/^\d{4}-KW\d{2}$/)
-  ]);
-  public pathFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern(/(\/|\\)$/)
-  ]);
+  public projectFormControl = new FormControl('', [Validators.required]);
+  public dateFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)]);
+  public pathFormControl = new FormControl('', [Validators.required, Validators.pattern(/(\/|\\)$/)]);
   public matcher = new MyErrorStateMatcher();
 
   public filteredProjects: Observable<string[]>;
-  public relatedFiles: Array<{name: string, tag: string}> = [];
+  public relatedFiles: Array<{ name: string; tag: string }> = [];
   public selectedFiles: string[] = [];
   public isFileValid = false;
   public isRunning = false;
@@ -50,43 +41,48 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
 
   private projects: string[];
 
-  constructor(
-    private fileService: FileService,
-    private localStorage: LocalStorageService,
-    private message: MatSnackBar,
-    private ref: ChangeDetectorRef
-  ) { }
+  // elementrefs
+  @ViewChild('projectInput', { static: true }) projectInputElement: ElementRef;
+
+  constructor(private fileService: FileService, private localStorage: LocalStorageService, private message: MatSnackBar, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
     // autocomplete handlers
     this.updateProjects();
-    this.filteredProjects = this.projectFormControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this.filter(value))
-      );
+    this.filteredProjects = merge(
+      fromEvent(this.projectInputElement.nativeElement, 'click').pipe(
+        map((e: Event) => {
+          this.updateProjects();
+          return (e.target as HTMLInputElement).value;
+        })
+      ),
+      this.projectFormControl.valueChanges
+    ).pipe(
+      startWith(''),
+      map(value => this.filter(value))
+    );
     // search related files
-    this.pathFormControl.valueChanges.pipe(
-      throttleTime(16)
-    ).subscribe(path => {
+    this.pathFormControl.valueChanges.pipe(throttleTime(16)).subscribe(path => {
       if (this.pathFormControl.valid) {
         this.fileService.searchFiles(path).then(files => {
-          files.filter(file => {
-            return /^[^~]*?(tips|mqpl|qpni).*?\.(xlsx?|xlsm)$/i.test(file);
-          }).forEach(file => {
-            let tag = '';
-            if (/mqpl/i.test(file)) {
-              tag = 'MQPL';
-            } else if (/qpni/i.test(file)) {
-              tag = 'QPNI';
-            } else if (/tips/i.test(file)) {
-              tag = 'TIPS';
-            }
-            this.relatedFiles.push({
-              name: file,
-              tag
+          files
+            .filter(file => {
+              return /^[^~]*?(tips|mqpl|qpni).*?\.(xlsx?|xlsm)$/i.test(file);
+            })
+            .forEach(file => {
+              let tag = '';
+              if (/mqpl/i.test(file)) {
+                tag = 'MQPL';
+              } else if (/qpni/i.test(file)) {
+                tag = 'QPNI';
+              } else if (/tips/i.test(file)) {
+                tag = 'TIPS';
+              }
+              this.relatedFiles.push({
+                name: file,
+                tag
+              });
             });
-          });
         });
       } else {
         this.relatedFiles = [];
@@ -98,26 +94,27 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // save button handlers
     const button = document.querySelector('#save-button');
-    fromEvent(button, 'click').pipe(
-      throttleTime(500)
-    ).subscribe(_ => {
-      this.localStorage.set(this.projectFormControl.value, this.dateFormControl.value);
-      this.updateProjects();
-      this.message.open(`项目：${this.projectFormControl.value}`, '保存成功', {
-        duration: 2000
+    fromEvent(button, 'click')
+      .pipe(throttleTime(500))
+      .subscribe(_ => {
+        this.localStorage.set(this.projectFormControl.value, this.dateFormControl.value);
+        this.updateProjects();
+        this.message.open(`项目：${this.projectFormControl.value}`, '保存成功', {
+          duration: 2000
+        });
       });
-    });
   }
 
   public sync(project: string) {
-    this.dateFormControl.setValue(this.localStorage.get(project).pvsTime);
+    this.dateFormControl.setValue(this.localStorage.get(project).PVS);
   }
 
   public delete(e, project: string) {
     e.stopPropagation();
     this.localStorage.delete(project);
     this.updateProjects();
-    this.projectFormControl.setValue('');
+    this.projectFormControl.reset();
+    this.dateFormControl.reset();
   }
 
   public pickFile(checked: boolean, file: string) {
@@ -135,10 +132,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
     const completePathFiles = this.selectedFiles.map(file => {
       return this.pathFormControl.value + file;
     });
-    this.fileService.start(
-      completePathFiles,
-      this.pathFormControl.value,
-      this.dateFormControl.value);
+    this.fileService.start(completePathFiles, this.pathFormControl.value, this.dateFormControl.value);
     this.fileService.progressInfo$.subscribe(info => {
       this.info = info;
       if (info === 'DONE') {
@@ -153,8 +147,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
   }
 
   private filter(value: string): string[] {
-    return this.projects.filter(
-      project => project.toLowerCase().includes(value.toLowerCase()));
+    return this.projects.filter(project => project.toLowerCase().includes(value.toLowerCase()));
   }
 
   private updateProjects() {
@@ -181,9 +174,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
   }
 
   private hasDuplicateFiles(relatedFileName) {
-    return this.selectedFiles
-      .filter(file => relatedFileName.test(file))
-      .length > 1;
+    return this.selectedFiles.filter(file => relatedFileName.test(file)).length > 1;
   }
 
   private showErrorMessage(error: string) {
@@ -191,5 +182,4 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
       duration: 1000
     });
   }
-
 }

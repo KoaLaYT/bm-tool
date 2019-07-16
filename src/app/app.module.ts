@@ -15,6 +15,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // fontawesome icons
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -25,11 +26,7 @@ import { BmMergeComponent } from './bm-merge/bm-merge.component';
 import { BmDrawerComponent } from './bm-drawer/bm-drawer.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BmMergeComponent,
-    BmDrawerComponent
-  ],
+  declarations: [AppComponent, BmMergeComponent, BmDrawerComponent],
   imports: [
     BrowserModule,
     NgxElectronModule,
@@ -43,9 +40,10 @@ import { BmDrawerComponent } from './bm-drawer/bm-drawer.component';
     MatButtonModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatSlideToggleModule,
     FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

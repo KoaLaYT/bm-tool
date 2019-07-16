@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  margin: 1em auto;
+  width: 95%;
+}
+
+.bm-drawer__infos {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.bm-drawer__project-input,
+.bm-drawer__weekStart-input,
+.bm-drawer__weekEnd-input {
+  flex: 1 0 180px;
+  margin-right: 1em;
+}
+#save-button {
+  display: block;
+  padding: 0 1em;
+}
+mat-option {
+  position: relative;
+}
+.icon-wrapper {
+  position: absolute;
+  right: 1em;
+}
+.icon-wrapper:hover fa-icon {
+  color: red;
+}
+
+.bm-drawer__terminplan {
+  margin-top: 0.5rem;
+}
+.bm-drawer__termins {
+  display: flex;
+  flex-flow: row wrap;
+
+  mat-form-field {
+    flex: 0 0 40%;
+    margin: 0 2.5% 0 0;
+  }
+}

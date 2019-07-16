@@ -1,3 +1,120 @@
-<p>
-  bm-drawer works!
-</p>
+<section class="bm-drawer__infos">
+  <mat-form-field class="bm-drawer__project-input">
+    <input placeholder="项目名" matInput [formControl]="projectFormControl" [errorStateMatcher]="matcher" [matAutocomplete]="auto" #projectInput />
+    <mat-error *ngIf="projectFormControl.hasError('required')">
+      必须提供项目名
+    </mat-error>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="sync($event.option.value)">
+      <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
+        {{ project }}
+        <span class="icon-wrapper" (click)="delete($event, project)">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="bm-drawer__weekStart-input">
+    <input matInput placeholder="起点周次" [formControl]="weekStartFormControl" [errorStateMatcher]="matcher" />
+    <mat-error *ngIf="weekStartFormControl.hasError('pattern') && !weekStartFormControl.hasError('required')">
+      日期格式必须为yyyy-KWww
+    </mat-error>
+    <mat-error *ngIf="weekStartFormControl.hasError('required')">
+      必须提供一个起点
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="bm-drawer__weekEnd-input">
+    <input matInput placeholder="终点周次" [formControl]="weekEndFormControl" [errorStateMatcher]="matcher" />
+    <mat-error *ngIf="weekEndFormControl.hasError('pattern') && !weekEndFormControl.hasError('required')">
+      日期格式必须为yyyy-KWww
+    </mat-error>
+    <mat-error *ngIf="weekEndFormControl.hasError('required')">
+      必须提供一个终点
+    </mat-error>
+  </mat-form-field>
+</section>
+
+<section class="bm-drawer__terminplan">
+  <mat-slide-toggle class="bm-drawer__dualPVS" color="primary" (change)="isDualPVS = $event.checked">
+    这个项目分为PVS1和PVS2
+  </mat-slide-toggle>
+
+  <section class="bm-drawer__termins" [formGroup]="terminplan">
+    <mat-form-field class="bm-drawer__VFFTBT">
+      <input matInput [placeholder]="isDualPVS ? 'PVS1 TBT' : 'VFF TBT'" formControlName="VFFTBT" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="VFFTBT.hasError('pattern') && !VFFTBT.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="VFFTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1 TBT' : 'VFF TBT' }}时间 </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__VFF">
+      <input matInput [placeholder]="isDualPVS ? 'PVS1' : 'VFF'" formControlName="VFF" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="VFF.hasError('pattern') && !VFF.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="VFF.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1' : 'VFF' }}时间 </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__PVSTBT">
+      <input matInput [placeholder]="isDualPVS ? 'PVS2 TBT' : 'PVS TBT'" formControlName="PVSTBT" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="PVSTBT.hasError('pattern') && !PVSTBT.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="PVSTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2 TBT' : 'PVS TBT' }}时间 </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__PVS">
+      <input matInput [placeholder]="isDualPVS ? 'PVS2' : 'PVS'" formControlName="PVS" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="PVS.hasError('pattern') && !PVS.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="PVS.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2' : 'PVS' }}时间 </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__OSTBT">
+      <input matInput placeholder="OS TBT" formControlName="OSTBT" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="OSTBT.hasError('pattern') && !OSTBT.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="OSTBT.hasError('required')">
+        必须提供OS TBT时间
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__OS">
+      <input matInput placeholder="OS" formControlName="OS" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="OS.hasError('pattern') && !OS.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="OS.hasError('required')">
+        必须提供OS时间
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__SOPTBT">
+      <input matInput placeholder="SOP TBT" formControlName="SOPTBT" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="SOPTBT.hasError('pattern') && !SOPTBT.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="SOPTBT.hasError('required')">
+        必须提供SOP TBT时间
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="bm-drawer__SOP">
+      <input matInput placeholder="SOP" formControlName="SOP" [errorStateMatcher]="matcher" />
+      <mat-error *ngIf="SOP.hasError('pattern') && !SOP.hasError('required')">
+        日期格式必须为yyyy-KWww
+      </mat-error>
+      <mat-error *ngIf="SOP.hasError('required')">
+        必须提供SOP时间
+      </mat-error>
+    </mat-form-field>
+  </section>
+</section>
+
+<section class="bm-drawer__controls">
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="projectFormControl.invalid || weekStartFormControl.invalid || weekEndFormControl.invalid || terminplan.invalid"
+    id="save-button2"
+  >
+    保存
+  </button>
+</section>

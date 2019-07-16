@@ -1,8 +1,8 @@
-<mat-tab-group color="primary" backgroundColor="primary">
+<mat-tab-group color="primary" backgroundColor="primary" (selectedTabChange)="selectedIndex = $event.index">
   <mat-tab label="对表">
     <app-bm-merge></app-bm-merge>
   </mat-tab>
   <mat-tab label="画图">
-    <app-bm-drawer></app-bm-drawer>
+    <app-bm-drawer [isSelected]="selectedIndex === 1"></app-bm-drawer>
   </mat-tab>
 </mat-tab-group>
