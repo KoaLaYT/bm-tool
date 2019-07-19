@@ -31,8 +31,10 @@ mat-option {
   color: red;
 }
 
-.bm-drawer__terminplan {
-  margin-top: 0.5rem;
+.bm-drawer__terminplan-currentKW {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
 }
 .bm-drawer__termins {
   display: flex;
@@ -44,6 +46,13 @@ mat-option {
   }
 }
 
+.bm-drawer__filePicker {
+  margin-bottom: 1rem;
+
+  span {
+    padding-left: 1rem;
+  }
+}
 /*input*/
 [type='file'] {
   position: absolute !important;
@@ -62,4 +71,9 @@ mat-option {
 }
 #draw-button {
   margin-left: auto;
+}
+
+mat-accordion {
+  display: block;
+  margin-bottom: 1rem;
 }

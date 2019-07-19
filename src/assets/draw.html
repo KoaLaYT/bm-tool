@@ -3,26 +3,54 @@
   <head>
     <meta charset="utf-8" />
     <title>送样曲线</title>
+    <link rel="stylesheet" href="./materialize.min.css" />
     <style>
       body {
+        margin: 0;
+      }
+      ul {
+        height: 10vh;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        list-style: none;
+      }
+      li {
+        margin: 1rem;
+        padding: 1rem 0;
+        cursor: pointer;
+      }
+      main {
+        flex: 0 0 auto;
         display: flex;
         width: 100vw;
-        height: 100vh;
+        height: 90vh;
         margin: 0;
       }
       .bm-curve {
         display: block;
         margin: auto;
-        border: 1px solid black;
         width: 24.5cm;
         height: 15.5cm;
-        object-fit: contain;
         object-position: center;
+        object-fit: contain;
       }
     </style>
   </head>
   <body>
-    <img class="bm-curve" />
+    <ul>
+      <li class="waves-effect waves-light btn blue darken-4">ZP7</li>
+      <li class="waves-effect waves-light btn blue darken-4">ZP5 Gesamt</li>
+      <li class="waves-effect waves-light btn blue darken-4">ZP5 HT</li>
+      <li class="waves-effect waves-light btn blue darken-4">ZP5 KT</li>
+      <li class="waves-effect waves-light btn blue darken-4">ZP5 ZSB</li>
+    </ul>
+    <main>
+      <img class="bm-curve" />
+    </main>
+
     <script src="./drawer.js"></script>
   </body>
 </html>

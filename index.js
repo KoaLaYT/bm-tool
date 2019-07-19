@@ -64,9 +64,13 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-ipcMain.on('draw', event => {
+ipcMain.on('draw', (event, metaInfo) => {
   win3 = new BrowserWindow({ width: 1000, height: 800, webPreferences });
   win3.loadFile('dist/electron-test/assets/draw.html');
+
+  win3.webContents.on('did-finish-load', () => {
+    win3.webContents.send('drawCurve', metaInfo);
+  });
 
   win3.on('closed', () => {
     event.reply('draw', 'closed');

@@ -18,7 +18,7 @@ export class LocalStorageService {
     return this.record;
   }
 
-  get(project: string): { PVS: string } {
+  get(project: string) {
     return JSON.parse(window.localStorage.getItem(project)).terminplan;
   }
 
@@ -29,22 +29,25 @@ export class LocalStorageService {
   set(project: string, pvsTime: string): void {
     if (this.hasRecorded(project)) {
       const previousRecord = JSON.parse(window.localStorage.getItem(project));
-      previousRecord.terminplan.PVS = pvsTime;
+      previousRecord.terminplan.ZP7.ZP7PVS = pvsTime;
       window.localStorage.setItem(project, JSON.stringify(previousRecord));
     } else {
-      window.localStorage.setItem(project, JSON.stringify({ terminplan: { PVS: pvsTime } }));
+      window.localStorage.setItem(project, JSON.stringify({ terminplan: { ZP7: { ZP7PVS: pvsTime } } }));
       this.record.push(project);
       window.localStorage.setItem('__record__', JSON.stringify(this.record));
     }
   }
 
-  setFullProjectInfo(project: string, startWeek: string, endWeek: string, terminplan) {
+  setFullProjectInfo(project: string, startWeek: string, endWeek: string, terminplanZP5, terminplanZP7) {
     window.localStorage.setItem(
       project,
       JSON.stringify({
         startWeek,
         endWeek,
-        terminplan
+        terminplan: {
+          ZP5: terminplanZP5,
+          ZP7: terminplanZP7
+        }
       })
     );
     if (!this.hasRecorded(project)) {

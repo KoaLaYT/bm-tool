@@ -17,6 +17,9 @@ export class FileService {
     this.electronService.ipcRenderer.on('draw', (event, info: string) => {
       this.drawingInfo$.next(info);
     });
+    this.electronService.ipcRenderer.on('readMQPL', (event, metaInfo) => {
+      this.electronService.ipcRenderer.send('draw', metaInfo);
+    });
   }
 
   public searchFiles(path: string): Promise<string[]> {
@@ -36,7 +39,10 @@ export class FileService {
     this.electronService.ipcRenderer.sendTo(2, 'request', files, path, PVSTime);
   }
 
-  public draw() {
-    this.electronService.ipcRenderer.send('draw', '');
+  public draw(filePath, dateInfo) {
+    const metaInfo = {
+      dateInfo
+    };
+    this.electronService.ipcRenderer.sendTo(2, 'readMQPL', filePath, metaInfo);
   }
 }

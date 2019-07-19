@@ -118,7 +118,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
   }
 
   public sync(project: string) {
-    this.dateFormControl.setValue(this.localStorage.get(project).PVS);
+    this.dateFormControl.setValue(this.localStorage.get(project).ZP7.ZP7PVS);
   }
 
   public delete(e, project: string) {

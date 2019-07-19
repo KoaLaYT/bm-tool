@@ -26,15 +26,25 @@ export class BmDrawerComponent implements OnInit, OnChanges {
   public projectFormControl = new FormControl('', [Validators.required]);
   public weekStartFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)]);
   public weekEndFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)]);
-  public terminplan = this.fb.group({
-    VFFTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    VFF: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    PVSTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    PVS: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    OSTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    OS: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    SOPTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
-    SOP: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }]
+  public terminplanZP5 = this.fb.group({
+    ZP5VFFTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5VFF: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5PVSTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5PVS: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5OSTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5OS: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5SOPTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP5SOP: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }]
+  });
+  public terminplanZP7 = this.fb.group({
+    ZP7VFFTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7VFF: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7PVSTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7PVS: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7OSTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7OS: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7SOPTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
+    ZP7SOP: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }]
   });
   public matcher = new MyErrorStateMatcher();
 
@@ -50,6 +60,14 @@ export class BmDrawerComponent implements OnInit, OnChanges {
 
   // elementrefs
   @ViewChild('projectInput', { static: true }) projectInputElement: ElementRef;
+
+  // file picker
+  public fileName = '';
+  public filePath = '';
+
+  // KW selector
+  public currentKW: string = '';
+  public totalKWs: string[] = [];
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -76,11 +94,17 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     );
 
     this.fileService.drawingInfo$.subscribe(info => {
-      console.log(info);
       if (info === 'closed') {
         this.isDrawing = false;
       }
       this.ref.detectChanges();
+    });
+
+    // update terminplan weeks range
+    merge(this.weekStartFormControl.valueChanges, this.weekEndFormControl.valueChanges).subscribe(_ => {
+      if (this.weekEndFormControl.value && this.weekStartFormControl.value) {
+        this.totalKWs = this.getFullWeeksArray(this.weekStartFormControl.value, this.weekEndFormControl.value);
+      }
     });
   }
 
@@ -94,7 +118,8 @@ export class BmDrawerComponent implements OnInit, OnChanges {
             this.projectFormControl.value,
             this.weekStartFormControl.value,
             this.weekEndFormControl.value,
-            this.terminplan.value
+            this.terminplanZP5.value,
+            this.terminplanZP7.value
           );
           this.updateProjects();
           this.message.open(`项目：${this.projectFormControl.value}`, '保存成功', {
@@ -110,20 +135,32 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     const projectInfo = this.localStorage.getFullProjectInfo(project);
     this.weekStartFormControl.setValue(projectInfo.startWeek || '');
     this.weekEndFormControl.setValue(projectInfo.endWeek || '');
-    this.terminplan.patchValue(projectInfo.terminplan);
+    this.terminplanZP5.patchValue(projectInfo.terminplan.ZP5);
+    this.terminplanZP7.patchValue(projectInfo.terminplan.ZP7);
   }
 
   public reset() {
     this.projectFormControl.reset();
     this.weekEndFormControl.reset();
     this.weekStartFormControl.reset();
-    this.terminplan.reset();
+    this.terminplanZP5.reset();
+    this.terminplanZP7.reset();
   }
 
   public draw() {
     this.isDrawing = true;
     // drawing detation
-    this.fileService.draw();
+    const dateInfo = {
+      startWeek: this.weekStartFormControl.value,
+      endWeek: this.weekEndFormControl.value,
+      isDualPVS: this.isDualPVS,
+      currentKW: this.currentKW,
+      terminplan: {
+        ZP5: this.terminplanZP5.value,
+        ZP7: this.terminplanZP7.value
+      }
+    };
+    this.fileService.draw(this.filePath, dateInfo);
   }
 
   public delete(e, project: string) {
@@ -134,6 +171,18 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     this.reset();
   }
 
+  public test(e) {
+    this.filePath = e.files[0].path;
+    this.fileName = e.files[0].name;
+
+    if (!/mqpl/i.test(this.fileName)) {
+      this.message.open(`${this.fileName}`, '不是MQPL母表', {
+        duration: 2000
+      });
+      this.filePath = this.fileName = '';
+    }
+  }
+
   private filter(value: string): string[] {
     return this.projects.filter(project => project.toLowerCase().includes(value.toLowerCase()));
   }
@@ -142,31 +191,77 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     this.projects = this.localStorage.lastRecords();
   }
 
+  private getFullWeeksArray(startWeek: string, endWeek: string): string[] {
+    const result = [];
+
+    let currentWeek = startWeek;
+    while (currentWeek <= endWeek) {
+      result.push(currentWeek);
+      let week: number | string = Number(currentWeek.slice(7));
+      let year = Number(currentWeek.slice(0, 4));
+
+      if (week + 1 > 52) {
+        year = year + 1;
+      }
+      week = (week % 52) + 1;
+      week = week < 10 ? '0' + week : week;
+      currentWeek = year + '-KW' + week;
+    }
+
+    return result;
+  }
+
   /**
    * helper functions for access form names
    */
-  public get VFFTBT() {
-    return this.terminplan.get('VFFTBT');
+  // ZP5
+  public get ZP5VFFTBT() {
+    return this.terminplanZP5.get('ZP5VFFTBT');
   }
-  public get VFF() {
-    return this.terminplan.get('VFF');
+  public get ZP5VFF() {
+    return this.terminplanZP5.get('ZP5VFF');
   }
-  public get PVSTBT() {
-    return this.terminplan.get('PVSTBT');
+  public get ZP5PVSTBT() {
+    return this.terminplanZP5.get('ZP5PVSTBT');
   }
-  public get PVS() {
-    return this.terminplan.get('PVS');
+  public get ZP5PVS() {
+    return this.terminplanZP5.get('ZP5PVS');
   }
-  public get OSTBT() {
-    return this.terminplan.get('OSTBT');
+  public get ZP5OSTBT() {
+    return this.terminplanZP5.get('ZP5OSTBT');
   }
-  public get OS() {
-    return this.terminplan.get('OS');
+  public get ZP5OS() {
+    return this.terminplanZP5.get('ZP5OS');
   }
-  public get SOPTBT() {
-    return this.terminplan.get('SOPTBT');
+  public get ZP5SOPTBT() {
+    return this.terminplanZP5.get('ZP5SOPTBT');
   }
-  public get SOP() {
-    return this.terminplan.get('SOP');
+  public get ZP5SOP() {
+    return this.terminplanZP5.get('ZP5SOP');
+  }
+  // ZP7
+  public get ZP7VFFTBT() {
+    return this.terminplanZP7.get('ZP7VFFTBT');
+  }
+  public get ZP7VFF() {
+    return this.terminplanZP7.get('ZP7VFF');
+  }
+  public get ZP7PVSTBT() {
+    return this.terminplanZP7.get('ZP7PVSTBT');
+  }
+  public get ZP7PVS() {
+    return this.terminplanZP7.get('ZP7PVS');
+  }
+  public get ZP7OSTBT() {
+    return this.terminplanZP7.get('ZP7OSTBT');
+  }
+  public get ZP7OS() {
+    return this.terminplanZP7.get('ZP7OS');
+  }
+  public get ZP7SOPTBT() {
+    return this.terminplanZP7.get('ZP7SOPTBT');
+  }
+  public get ZP7SOP() {
+    return this.terminplanZP7.get('ZP7SOP');
   }
 }

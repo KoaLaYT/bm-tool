@@ -16,6 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
 
 // fontawesome icons
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -41,6 +43,8 @@ import { BmDrawerComponent } from './bm-drawer/bm-drawer.component';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
+    MatExpansionModule,
+    MatSelectModule,
     FontAwesomeModule
   ],
   providers: [],

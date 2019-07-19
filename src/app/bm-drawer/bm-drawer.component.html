@@ -15,7 +15,7 @@
   </mat-form-field>
 
   <mat-form-field class="bm-drawer__weekStart-input">
-    <input matInput placeholder="起点周次" [formControl]="weekStartFormControl" [errorStateMatcher]="matcher" />
+    <input matInput placeholder="起点周数" [formControl]="weekStartFormControl" [errorStateMatcher]="matcher" />
     <mat-error *ngIf="weekStartFormControl.hasError('pattern') && !weekStartFormControl.hasError('required')">
       日期格式必须为yyyy-KWww
     </mat-error>
@@ -25,7 +25,7 @@
   </mat-form-field>
 
   <mat-form-field class="bm-drawer__weekEnd-input">
-    <input matInput placeholder="终点周次" [formControl]="weekEndFormControl" [errorStateMatcher]="matcher" />
+    <input matInput placeholder="终点周数" [formControl]="weekEndFormControl" [errorStateMatcher]="matcher" />
     <mat-error *ngIf="weekEndFormControl.hasError('pattern') && !weekEndFormControl.hasError('required')">
       日期格式必须为yyyy-KWww
     </mat-error>
@@ -36,84 +36,176 @@
 </section>
 
 <section class="bm-drawer__terminplan">
-  <mat-slide-toggle class="bm-drawer__dualPVS" color="primary" (change)="isDualPVS = $event.checked">
-    这个项目分为PVS1和PVS2
-  </mat-slide-toggle>
-
-  <section class="bm-drawer__termins" [formGroup]="terminplan">
-    <mat-form-field class="bm-drawer__VFFTBT">
-      <input matInput [placeholder]="isDualPVS ? 'PVS1 TBT' : 'VFF TBT'" formControlName="VFFTBT" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="VFFTBT.hasError('pattern') && !VFFTBT.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="VFFTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1 TBT' : 'VFF TBT' }}时间 </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__VFF">
-      <input matInput [placeholder]="isDualPVS ? 'PVS1' : 'VFF'" formControlName="VFF" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="VFF.hasError('pattern') && !VFF.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="VFF.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1' : 'VFF' }}时间 </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__PVSTBT">
-      <input matInput [placeholder]="isDualPVS ? 'PVS2 TBT' : 'PVS TBT'" formControlName="PVSTBT" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="PVSTBT.hasError('pattern') && !PVSTBT.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="PVSTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2 TBT' : 'PVS TBT' }}时间 </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__PVS">
-      <input matInput [placeholder]="isDualPVS ? 'PVS2' : 'PVS'" formControlName="PVS" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="PVS.hasError('pattern') && !PVS.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="PVS.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2' : 'PVS' }}时间 </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__OSTBT">
-      <input matInput placeholder="OS TBT" formControlName="OSTBT" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="OSTBT.hasError('pattern') && !OSTBT.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="OSTBT.hasError('required')">
-        必须提供OS TBT时间
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__OS">
-      <input matInput placeholder="OS" formControlName="OS" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="OS.hasError('pattern') && !OS.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="OS.hasError('required')">
-        必须提供OS时间
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__SOPTBT">
-      <input matInput placeholder="SOP TBT" formControlName="SOPTBT" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="SOPTBT.hasError('pattern') && !SOPTBT.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="SOPTBT.hasError('required')">
-        必须提供SOP TBT时间
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="bm-drawer__SOP">
-      <input matInput placeholder="SOP" formControlName="SOP" [errorStateMatcher]="matcher" />
-      <mat-error *ngIf="SOP.hasError('pattern') && !SOP.hasError('required')">
-        日期格式必须为yyyy-KWww
-      </mat-error>
-      <mat-error *ngIf="SOP.hasError('required')">
-        必须提供SOP时间
-      </mat-error>
+  <section class="bm-drawer__terminplan-currentKW">
+    <mat-slide-toggle class="bm-drawer__dualPVS" color="primary" (change)="isDualPVS = $event.checked">
+      这个项目分为PVS1和PVS2
+    </mat-slide-toggle>
+    <mat-form-field>
+      <mat-label>当前周数</mat-label>
+      <mat-select [(value)]="currentKW">
+        <mat-option *ngFor="let kw of totalKWs" [value]="kw">
+          {{ kw }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
   </section>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          ZP5 terminplan
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__termins" [formGroup]="terminplanZP5">
+        <mat-form-field class="bm-drawer__VFFTBT">
+          <input matInput [placeholder]="isDualPVS ? 'PVS1 TBT' : 'VFF TBT'" formControlName="ZP5VFFTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5VFFTBT.hasError('pattern') && !ZP5VFFTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5VFFTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1 TBT' : 'VFF TBT' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__VFF">
+          <input matInput [placeholder]="isDualPVS ? 'PVS1' : 'VFF'" formControlName="ZP5VFF" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5VFF.hasError('pattern') && !ZP5VFF.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5VFF.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1' : 'VFF' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__PVSTBT">
+          <input matInput [placeholder]="isDualPVS ? 'PVS2 TBT' : 'PVS TBT'" formControlName="ZP5PVSTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5PVSTBT.hasError('pattern') && !ZP5PVSTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5PVSTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2 TBT' : 'PVS TBT' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__PVS">
+          <input matInput [placeholder]="isDualPVS ? 'PVS2' : 'PVS'" formControlName="ZP5PVS" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5PVS.hasError('pattern') && !ZP5PVS.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5PVS.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2' : 'PVS' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__OSTBT">
+          <input matInput placeholder="OS TBT" formControlName="ZP5OSTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5OSTBT.hasError('pattern') && !ZP5OSTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5OSTBT.hasError('required')">
+            必须提供OS TBT时间
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__OS">
+          <input matInput placeholder="OS" formControlName="ZP5OS" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5OS.hasError('pattern') && !ZP5OS.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5OS.hasError('required')">
+            必须提供OS时间
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__SOPTBT">
+          <input matInput placeholder="SOP TBT" formControlName="ZP5SOPTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5SOPTBT.hasError('pattern') && !ZP5SOPTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5SOPTBT.hasError('required')">
+            必须提供SOP TBT时间
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__SOP">
+          <input matInput placeholder="SOP" formControlName="ZP5SOP" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP5SOP.hasError('pattern') && !ZP5SOP.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP5SOP.hasError('required')">
+            必须提供SOP时间
+          </mat-error>
+        </mat-form-field>
+      </section>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          ZP7 terminplan
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__termins" [formGroup]="terminplanZP7">
+        <mat-form-field class="bm-drawer__VFFTBT">
+          <input matInput [placeholder]="isDualPVS ? 'PVS1 TBT' : 'VFF TBT'" formControlName="ZP7VFFTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7VFFTBT.hasError('pattern') && !ZP7VFFTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7VFFTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1 TBT' : 'VFF TBT' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__VFF">
+          <input matInput [placeholder]="isDualPVS ? 'PVS1' : 'VFF'" formControlName="ZP7VFF" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7VFF.hasError('pattern') && !ZP7VFF.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7VFF.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS1' : 'VFF' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__PVSTBT">
+          <input matInput [placeholder]="isDualPVS ? 'PVS2 TBT' : 'PVS TBT'" formControlName="ZP7PVSTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7PVSTBT.hasError('pattern') && !ZP7PVSTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7PVSTBT.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2 TBT' : 'PVS TBT' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__PVS">
+          <input matInput [placeholder]="isDualPVS ? 'PVS2' : 'PVS'" formControlName="ZP7PVS" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7PVS.hasError('pattern') && !ZP7PVS.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7PVS.hasError('required')"> 必须提供{{ isDualPVS ? 'PVS2' : 'PVS' }}时间 </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__OSTBT">
+          <input matInput placeholder="OS TBT" formControlName="ZP7OSTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7OSTBT.hasError('pattern') && !ZP7OSTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7OSTBT.hasError('required')">
+            必须提供OS TBT时间
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__OS">
+          <input matInput placeholder="OS" formControlName="ZP7OS" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7OS.hasError('pattern') && !ZP7OS.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7OS.hasError('required')">
+            必须提供OS时间
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__SOPTBT">
+          <input matInput placeholder="SOP TBT" formControlName="ZP7SOPTBT" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7SOPTBT.hasError('pattern') && !ZP7SOPTBT.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7SOPTBT.hasError('required')">
+            必须提供SOP TBT时间
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="bm-drawer__SOP">
+          <input matInput placeholder="SOP" formControlName="ZP7SOP" [errorStateMatcher]="matcher" />
+          <mat-error *ngIf="ZP7SOP.hasError('pattern') && !ZP7SOP.hasError('required')">
+            日期格式必须为yyyy-KWww
+          </mat-error>
+          <mat-error *ngIf="ZP7SOP.hasError('required')">
+            必须提供SOP时间
+          </mat-error>
+        </mat-form-field>
+      </section>
+    </mat-expansion-panel>
+  </mat-accordion>
 </section>
 
-<section class="bm-drawer">
+<section class="bm-drawer__filePicker">
   <div>
-    <input id="file-picker" type="file" #fileInput />
+    <input id="file-picker" type="file" accept=".xlsx, .xls, .xlsm" (change)="test(fileInput)" #fileInput />
     <label for="file-picker">
       <a mat-raised-button color="primary">选择母表</a>
-      <p>{{ fileInput.files[0]?.name }}</p>
+      <span>{{ fileName }}</span>
     </label>
   </div>
 </section>
@@ -122,7 +214,7 @@
   <button
     mat-raised-button
     color="primary"
-    [disabled]="projectFormControl.invalid || weekStartFormControl.invalid || weekEndFormControl.invalid || terminplan.invalid"
+    [disabled]="projectFormControl.invalid || weekStartFormControl.invalid || weekEndFormControl.invalid || terminplanZP5.invalid || terminplanZP7.invalid"
     id="save-button2"
   >
     保存
@@ -133,7 +225,16 @@
   <button
     mat-raised-button
     color="primary"
-    [disabled]="projectFormControl.invalid || weekStartFormControl.invalid || weekEndFormControl.invalid || terminplan.invalid || isDrawing"
+    [disabled]="
+      projectFormControl.invalid ||
+      weekStartFormControl.invalid ||
+      weekEndFormControl.invalid ||
+      terminplanZP5.invalid ||
+      terminplanZP7.invalid ||
+      isDrawing ||
+      !filePath ||
+      !currentKW
+    "
     id="draw-button"
     (click)="draw()"
   >
