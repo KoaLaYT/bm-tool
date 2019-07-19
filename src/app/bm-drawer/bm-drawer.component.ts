@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material';
@@ -11,6 +11,7 @@ import { throttleTime, startWith, map } from 'rxjs/operators';
 
 import { MyErrorStateMatcher } from './../bm-merge/bm-merge.component';
 
+import { FileService } from '../file.service';
 import { LocalStorageService } from '../local-storage.service';
 
 @Component({
@@ -44,10 +45,19 @@ export class BmDrawerComponent implements OnInit, OnChanges {
 
   private projects: string[];
 
+  // draw indicator
+  public isDrawing = false;
+
   // elementrefs
   @ViewChild('projectInput', { static: true }) projectInputElement: ElementRef;
 
-  constructor(private fb: FormBuilder, private localStorage: LocalStorageService, private message: MatSnackBar) {}
+  constructor(
+    private ref: ChangeDetectorRef,
+    private fb: FormBuilder,
+    private fileService: FileService,
+    private localStorage: LocalStorageService,
+    private message: MatSnackBar
+  ) {}
 
   ngOnInit() {
     // autocomplete handlers
@@ -64,6 +74,14 @@ export class BmDrawerComponent implements OnInit, OnChanges {
       startWith(''),
       map(value => this.filter(value))
     );
+
+    this.fileService.drawingInfo$.subscribe(info => {
+      console.log(info);
+      if (info === 'closed') {
+        this.isDrawing = false;
+      }
+      this.ref.detectChanges();
+    });
   }
 
   ngOnChanges() {
@@ -95,15 +113,25 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     this.terminplan.patchValue(projectInfo.terminplan);
   }
 
+  public reset() {
+    this.projectFormControl.reset();
+    this.weekEndFormControl.reset();
+    this.weekStartFormControl.reset();
+    this.terminplan.reset();
+  }
+
+  public draw() {
+    this.isDrawing = true;
+    // drawing detation
+    this.fileService.draw();
+  }
+
   public delete(e, project: string) {
     e.stopPropagation();
     this.localStorage.delete(project);
     this.updateProjects();
     // clear all inputs
-    this.projectFormControl.reset();
-    this.weekEndFormControl.reset();
-    this.weekStartFormControl.reset();
-    this.terminplan.reset();
+    this.reset();
   }
 
   private filter(value: string): string[] {

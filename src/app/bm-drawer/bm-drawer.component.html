@@ -108,6 +108,16 @@
   </section>
 </section>
 
+<section class="bm-drawer">
+  <div>
+    <input id="file-picker" type="file" #fileInput />
+    <label for="file-picker">
+      <a mat-raised-button color="primary">选择母表</a>
+      <p>{{ fileInput.files[0]?.name }}</p>
+    </label>
+  </div>
+</section>
+
 <section class="bm-drawer__controls">
   <button
     mat-raised-button
@@ -116,5 +126,17 @@
     id="save-button2"
   >
     保存
+  </button>
+  <button mat-raised-button color="accent" (click)="reset()">
+    重置
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="projectFormControl.invalid || weekStartFormControl.invalid || weekEndFormControl.invalid || terminplan.invalid || isDrawing"
+    id="draw-button"
+    (click)="draw()"
+  >
+    画图
   </button>
 </section>

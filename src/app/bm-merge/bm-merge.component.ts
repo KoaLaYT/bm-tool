@@ -89,6 +89,18 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
         this.selectedFiles = [];
       }
     });
+    // file merge info updates
+    this.fileService.progressInfo$.subscribe(info => {
+      this.info = info;
+      if (info === 'DONE') {
+        this.isRunning = false;
+        this.info = '';
+        this.message.open('新MQPL母表已生成', '完成', {
+          duration: 2000
+        });
+      }
+      this.ref.detectChanges();
+    });
   }
 
   ngAfterViewInit() {
@@ -133,17 +145,6 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
       return this.pathFormControl.value + file;
     });
     this.fileService.start(completePathFiles, this.pathFormControl.value, this.dateFormControl.value);
-    this.fileService.progressInfo$.subscribe(info => {
-      this.info = info;
-      if (info === 'DONE') {
-        this.isRunning = false;
-        this.info = '';
-        this.message.open('新MQPL母表已生成', '完成', {
-          duration: 2000
-        });
-      }
-      this.ref.detectChanges();
-    });
   }
 
   private filter(value: string): string[] {
