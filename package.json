@@ -18,7 +18,6 @@
       "dist/**/*"
     ],
     "win": {
-      "icon": "./favicon.ico",
       "target": [
         {
           "target": "portable",
@@ -29,6 +28,7 @@
       ]
     }
   },
+  "postinstall": "electron-builder install-app-deps",
   "dependencies": {
     "@angular/animations": "^8.1.1",
     "@angular/cdk": "^8.1.0",

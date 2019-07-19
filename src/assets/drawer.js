@@ -7,7 +7,7 @@ const bmContainer = document.querySelector('.bm-curve');
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 const RATIO = 2;
-const fontStyle = '24px monospace';
+const fontStyle = '24px consolas';
 
 canvas.width = 928 * RATIO;
 canvas.height = 588 * RATIO;

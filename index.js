@@ -5,7 +5,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 let win1, win2, win3;
 
 const webPreferences = {
-  nodeIntegration: true
+  nodeIntegration: true,
+  devTools: false
 };
 
 function createWindow() {
@@ -13,6 +14,7 @@ function createWindow() {
   win1 = new BrowserWindow({
     width: 500,
     height: 500,
+    autoHideMenuBar: true,
     webPreferences
   });
   win2 = new BrowserWindow({
@@ -65,7 +67,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 ipcMain.on('draw', (event, metaInfo) => {
-  win3 = new BrowserWindow({ width: 1000, height: 800, webPreferences });
+  win3 = new BrowserWindow({ width: 1000, height: 800, autoHideMenuBar: true, webPreferences });
   win3.loadFile('dist/electron-test/assets/draw.html');
 
   win3.webContents.on('did-finish-load', () => {
