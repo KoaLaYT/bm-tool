@@ -46,6 +46,24 @@ mat-option {
   }
 }
 
+.bm-drawer__prognose {
+  display: flex;
+  flex-flow: column nowrap;
+
+  & > mat-form-field {
+    width: 40%;
+  }
+}
+.bm-drawer__prognose__detail {
+  display: flex;
+  flex-flow: row wrap;
+
+  & > mat-form-field {
+    display: inline-block;
+    margin-right: 1rem;
+  }
+}
+
 .bm-drawer__filePicker {
   margin-bottom: 1rem;
 

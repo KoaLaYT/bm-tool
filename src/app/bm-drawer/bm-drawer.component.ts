@@ -46,6 +46,63 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     ZP7SOPTBT: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }],
     ZP7SOP: ['', { validators: [Validators.required, Validators.pattern(/^\d{4}-KW\d{2}$/)] }]
   });
+  public prognoseZP7 = this.fb.group({
+    PrognoseKWZP7: [''],
+    'EM OffenZP7': [''],
+    'Spaete.EMTZP7': [''],
+    'Abgel.EMTZP7': [''],
+    Note6ZP7: [''],
+    'M/L i.AZP7': [''],
+    Q3ZP7: [''],
+    'EBV i.AZP7': [''],
+    'FE54 i.AZP7': [''],
+    Note3ZP7: [''],
+    Note1ZP7: ['']
+  });
+  public prognoseZP5 = this.fb.group({
+    'PrognoseKWZP5 Gesamt': [''],
+    'EM OffenZP5 Gesamt': [''],
+    'Spaete.EMTZP5 Gesamt': [''],
+    'Abgel.EMTZP5 Gesamt': [''],
+    'Note6ZP5 Gesamt': [''],
+    'M/L i.AZP5 Gesamt': [''],
+    'Q3ZP5 Gesamt': [''],
+    'Note3ZP5 Gesamt': [''],
+    'Note1ZP5 Gesamt': ['']
+  });
+  public prognoseZP5HT = this.fb.group({
+    'PrognoseKWZP5 HT': [''],
+    'EM OffenZP5 HT': [''],
+    'Spaete.EMTZP5 HT': [''],
+    'Abgel.EMTZP5 HT': [''],
+    'Note6ZP5 HT': [''],
+    'M/L i.AZP5 HT': [''],
+    'Q3ZP5 HT': [''],
+    'Note3ZP5 HT': [''],
+    'Note1ZP5 HT': ['']
+  });
+  public prognoseZP5KT = this.fb.group({
+    'PrognoseKWZP5 KT': [''],
+    'EM OffenZP5 KT': [''],
+    'Spaete.EMTZP5 KT': [''],
+    'Abgel.EMTZP5 KT': [''],
+    'Note6ZP5 KT': [''],
+    'M/L i.AZP5 KT': [''],
+    'Q3ZP5 KT': [''],
+    'Note3ZP5 KT': [''],
+    'Note1ZP5 KT': ['']
+  });
+  public prognoseZP5ZSB = this.fb.group({
+    'PrognoseKWZP5 ZSB': [''],
+    'EM OffenZP5 ZSB': [''],
+    'Spaete.EMTZP5 ZSB': [''],
+    'Abgel.EMTZP5 ZSB': [''],
+    'Note6ZP5 ZSB': [''],
+    'M/L i.AZP5 ZSB': [''],
+    'Q3ZP5 ZSB': [''],
+    'Note3ZP5 ZSB': [''],
+    'Note1ZP5 ZSB': ['']
+  });
   public matcher = new MyErrorStateMatcher();
 
   public filteredProjects: Observable<string[]>;
@@ -145,6 +202,11 @@ export class BmDrawerComponent implements OnInit, OnChanges {
     this.weekStartFormControl.reset();
     this.terminplanZP5.reset();
     this.terminplanZP7.reset();
+    this.prognoseZP7.reset();
+    this.prognoseZP5.reset();
+    this.prognoseZP5HT.reset();
+    this.prognoseZP5KT.reset();
+    this.prognoseZP5ZSB.reset();
   }
 
   public draw() {
@@ -158,6 +220,13 @@ export class BmDrawerComponent implements OnInit, OnChanges {
       terminplan: {
         ZP5: this.terminplanZP5.value,
         ZP7: this.terminplanZP7.value
+      },
+      prognose: {
+        ZP7: this.prognoseZP7.value,
+        'ZP5 Gesamt': this.prognoseZP5.value,
+        'ZP5 HT': this.prognoseZP5HT.value,
+        'ZP5 KT': this.prognoseZP5KT.value,
+        'ZP5 ZSB': this.prognoseZP5ZSB.value
       }
     };
     this.fileService.draw(this.filePath, dateInfo);

@@ -173,6 +173,25 @@ function renderBMC(type, currentKW) {
       curvesPoints[curve].push(point);
     });
   });
+  // 绘制预测柱子
+  if (metaInfo.dateInfo.prognose[type]['PrognoseKW' + type]) {
+    const prognoseInfo = metaInfo.dateInfo.prognose[type];
+    console.log(prognoseInfo);
+    const prognoseKW = prognoseInfo['PrognoseKW' + type];
+    const startKW = metaInfo.dateInfo.startWeek;
+    const index = getWeeksArray(startKW, prognoseKW).length - 1;
+    let accNumOfPillar = 0;
+    info.pillars.forEach(pillar => {
+      const startPoint = {
+        x: XbeginPoint.x + width * index + 1 * RATIO,
+        y: YendPoint.y + height * accNumOfPillar
+      };
+      const num = prognoseInfo[pillar + type] || 0;
+
+      renderPillar(startPoint, width - 2 * RATIO, num * height, colors[pillar]);
+      accNumOfPillar += num;
+    });
+  }
   // 绘制曲线
   for (const curve in curvesPoints) {
     renderCurve(curvesPoints[curve], colors[curve]);

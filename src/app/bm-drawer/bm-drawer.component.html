@@ -200,6 +200,222 @@
   </mat-accordion>
 </section>
 
+<section class="bm-drawer__prognose">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>ZP7 Prognose</mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__prognose" [formGroup]="prognoseZP7">
+        <mat-form-field>
+          <mat-label>预测周数</mat-label>
+          <mat-select formControlName="PrognoseKWZP7">
+            <mat-option *ngFor="let kw of totalKWs" [value]="kw">
+              {{ kw }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section class="bm-drawer__prognose__detail">
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="EM Offen" formControlName="EM OffenZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Spaete EMT" formControlName="Spaete.EMTZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Abgel EMT" formControlName="Abgel.EMTZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 6" formControlName="Note6ZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="M/L i.A" formControlName="M/L i.AZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Q3" formControlName="Q3ZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="EBV i.A" formControlName="EBV i.AZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="FE54 i.A" formControlName="FE54 i.AZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 3" formControlName="Note3ZP7" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 1" formControlName="Note1ZP7" />
+          </mat-form-field>
+        </section>
+      </section>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>ZP5 Gesamt Prognose</mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__prognose" [formGroup]="prognoseZP5">
+        <mat-form-field>
+          <mat-label>预测周数</mat-label>
+          <mat-select formControlName="PrognoseKWZP5 Gesamt">
+            <mat-option *ngFor="let kw of totalKWs" [value]="kw">
+              {{ kw }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section class="bm-drawer__prognose__detail">
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="EM Offen" formControlName="EM OffenZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Spaete EMT" formControlName="Spaete.EMTZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Abgel EMT" formControlName="Abgel.EMTZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 6" formControlName="Note6ZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="M/L i.A" formControlName="M/L i.AZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Q3" formControlName="Q3ZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 3" formControlName="Note3ZP5 Gesamt" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 1" formControlName="Note1ZP5 Gesamt" />
+          </mat-form-field>
+        </section>
+      </section>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>ZP5 HT Prognose</mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__prognose" [formGroup]="prognoseZP5HT">
+        <mat-form-field>
+          <mat-label>预测周数</mat-label>
+          <mat-select formControlName="PrognoseKWZP5 HT">
+            <mat-option *ngFor="let kw of totalKWs" [value]="kw">
+              {{ kw }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section class="bm-drawer__prognose__detail">
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="EM Offen" formControlName="EM OffenZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Spaete EMT" formControlName="Spaete.EMTZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Abgel EMT" formControlName="Abgel.EMTZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 6" formControlName="Note6ZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="M/L i.A" formControlName="M/L i.AZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Q3" formControlName="Q3ZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 3" formControlName="Note3ZP5 HT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 1" formControlName="Note1ZP5 HT" />
+          </mat-form-field>
+        </section>
+      </section>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>ZP5 KT Prognose</mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__prognose" [formGroup]="prognoseZP5KT">
+        <mat-form-field>
+          <mat-label>预测周数</mat-label>
+          <mat-select formControlName="PrognoseKWZP5 KT">
+            <mat-option *ngFor="let kw of totalKWs" [value]="kw">
+              {{ kw }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section class="bm-drawer__prognose__detail">
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="EM Offen" formControlName="EM OffenZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Spaete EMT" formControlName="Spaete.EMTZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Abgel EMT" formControlName="Abgel.EMTZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 6" formControlName="Note6ZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="M/L i.A" formControlName="M/L i.AZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Q3" formControlName="Q3ZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 3" formControlName="Note3ZP5 KT" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 1" formControlName="Note1ZP5 KT" />
+          </mat-form-field>
+        </section>
+      </section>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>ZP5 ZSB Prognose</mat-panel-title>
+      </mat-expansion-panel-header>
+      <section class="bm-drawer__prognose" [formGroup]="prognoseZP5ZSB">
+        <mat-form-field>
+          <mat-label>预测周数</mat-label>
+          <mat-select formControlName="PrognoseKWZP5 ZSB">
+            <mat-option *ngFor="let kw of totalKWs" [value]="kw">
+              {{ kw }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <section class="bm-drawer__prognose__detail">
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="EM Offen" formControlName="EM OffenZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Spaete EMT" formControlName="Spaete.EMTZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Abgel EMT" formControlName="Abgel.EMTZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 6" formControlName="Note6ZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="M/L i.A" formControlName="M/L i.AZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Q3" formControlName="Q3ZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 3" formControlName="Note3ZP5 ZSB" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Note 1" formControlName="Note1ZP5 ZSB" />
+          </mat-form-field>
+        </section>
+      </section>
+    </mat-expansion-panel>
+  </mat-accordion>
+</section>
+
 <section class="bm-drawer__filePicker">
   <div>
     <input id="file-picker" type="file" accept=".xlsx, .xls, .xlsm" (change)="test(fileInput)" #fileInput />
