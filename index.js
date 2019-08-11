@@ -6,19 +6,19 @@ let win1, win2, win3;
 
 const webPreferences = {
   nodeIntegration: true,
-  devTools: false
+  devTools: true
 };
 
 function createWindow() {
   // Create the browser window.
   win1 = new BrowserWindow({
-    width: 500,
+    width: 600,
     height: 500,
     autoHideMenuBar: true,
     webPreferences
   });
   win2 = new BrowserWindow({
-    width: 500,
+    width: 600,
     height: 500,
     show: false,
     webPreferences

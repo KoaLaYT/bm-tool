@@ -64,6 +64,8 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
     // search related files
     this.pathFormControl.valueChanges.pipe(throttleTime(16)).subscribe(path => {
       if (this.pathFormControl.valid) {
+        this.relatedFiles = [];
+        this.selectedFiles = [];
         this.fileService.searchFiles(path).then(files => {
           files
             .filter(file => {
@@ -98,6 +100,9 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
         this.message.open('新MQPL母表已生成', '完成', {
           duration: 2000
         });
+        setTimeout(() => {
+          this.pathFormControl.setValue(this.pathFormControl.value);
+        }, 100);
       }
       this.ref.detectChanges();
     });
@@ -158,12 +163,13 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
   private checkFileValidity(): boolean {
     // no duplicate files
     const relatedFileNames = [/tips/i, /mqpl/i, /qpni/i];
-    relatedFileNames.forEach(reg => {
+    for (let reg of relatedFileNames) {
       if (this.hasDuplicateFiles(reg)) {
         this.showErrorMessage('同一类型的表格只能选择一张');
         return false;
       }
-    });
+    }
+
     // tips must be presented
     if (this.selectedFiles.filter(file => /tips/i.test(file)).length === 0) {
       if (this.isFileValid) {
