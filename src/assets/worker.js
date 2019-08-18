@@ -20,6 +20,55 @@ ipcRenderer.on('readMQPL', (event, path, metaInfo) => {
   ipcRenderer.sendTo(1, 'readMQPL', metaInfo);
 });
 
+// output new TIPS
+ipcRenderer.on('output', (event, files, path) => {
+  let TIPS, MQPL, projectName;
+  files.forEach(fileName => {
+    const type = fileType(fileName);
+    ipcRenderer.sendTo(1, 'output', `正在读取: ${type} ...`);
+    const workbook = XLSX.readFile(fileName);
+    const sheet_list = workbook.SheetNames;
+    const sheet = workbook.Sheets[sheet_list[0]];
+    switch (type) {
+      case 'TIPS':
+        projectName = sheet_list[0];
+        TIPS = XLSX.utils.sheet_to_json(sheet, { header: 'A', defval: '' });
+        break;
+      case 'MQPL':
+        MQPL = XLSX.utils.sheet_to_json(sheet, { header: 'A', defval: '' });
+        break;
+    }
+  });
+
+  ipcRenderer.sendTo(1, 'output', `生成新表 ...`);
+  let index = 1;
+  TIPS.forEach((record, i) => {
+    if (record['V'] != 'LC2' && i != 0) {
+      record['EN'] = MQPL[index]['Z']; //EM IST
+      record['FB'] = record['FC'] = MQPL[index]['AY']; // Q3 Dauer
+      record['FM'] = record['FN'] = MQPL[index]['BD']; //Q1 Dauer
+      record['FH'] = MQPL[index]['J']; // MQ FOP
+      index++;
+    }
+  });
+
+  const newTIPS = XLSX.utils.book_new();
+  newTIPS.SheetNames.push(projectName);
+  newTIPS.Sheets[projectName] = XLSX.utils.json_to_sheet(TIPS, { skipHeader: true });
+
+  let postfix = new Date();
+  postfix = postfix
+    .toString()
+    .split(' ')
+    .slice(1, 5)
+    .join('-')
+    .replace(/:/g, '-');
+  let newFileName = 'TIPS_' + postfix + '.xlsx';
+  XLSX.writeFile(newTIPS, path + newFileName);
+
+  ipcRenderer.sendTo(1, 'output', `DONE`);
+});
+
 // merge xlsxs
 ipcRenderer.on('request', (event, files, path, PVSTime) => {
   let QPNI, TIPS, MQPL;
@@ -323,15 +372,15 @@ ipcRenderer.on('request', (event, files, path, PVSTime) => {
     }
     return archive;
   }
-
-  function fileType(fileName) {
-    if (fileName.toLowerCase().includes('tips')) {
-      return 'TIPS';
-    } else if (fileName.toLowerCase().includes('mqpl')) {
-      return 'MQPL';
-    } else {
-      return 'QPNI';
-    }
-  }
 });
 //})();
+
+function fileType(fileName) {
+  if (fileName.toLowerCase().includes('tips')) {
+    return 'TIPS';
+  } else if (fileName.toLowerCase().includes('mqpl')) {
+    return 'MQPL';
+  } else {
+    return 'QPNI';
+  }
+}

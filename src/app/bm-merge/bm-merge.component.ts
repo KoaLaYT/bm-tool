@@ -33,6 +33,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
   public relatedFiles: Array<{ name: string; tag: string }> = [];
   public selectedFiles: string[] = [];
   public isFileValid = false;
+  public isFileValidForOutput = false;
   public isRunning = false;
   public info = '';
 
@@ -97,7 +98,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
       if (info === 'DONE') {
         this.isRunning = false;
         this.info = '';
-        this.message.open('新MQPL母表已生成', '完成', {
+        this.message.open('新MQPL母表/TIPS已生成', '完成', {
           duration: 2000
         });
         setTimeout(() => {
@@ -141,6 +142,7 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
       this.selectedFiles = this.selectedFiles.filter(fileName => fileName !== file);
     }
     this.isFileValid = this.checkFileValidity();
+    this.isFileValidForOutput = this.checkFileValidityForOutput();
     console.log(this.selectedFiles);
   }
 
@@ -150,6 +152,14 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
       return this.pathFormControl.value + file;
     });
     this.fileService.start(completePathFiles, this.pathFormControl.value, this.dateFormControl.value);
+  }
+
+  public output() {
+    this.isRunning = true;
+    const completePathFiles = this.selectedFiles.map(file => {
+      return this.pathFormControl.value + file;
+    });
+    this.fileService.output(completePathFiles, this.pathFormControl.value);
   }
 
   private filter(value: string): string[] {
@@ -178,6 +188,22 @@ export class BmMergeComponent implements OnInit, AfterViewInit {
       return false;
     }
     return true;
+  }
+
+  private checkFileValidityForOutput(): boolean {
+    // no duplicate files
+    const relatedFileNames = [/tips/i, /mqpl/i, /qpni/i];
+    for (let reg of relatedFileNames) {
+      if (this.hasDuplicateFiles(reg)) {
+        return false;
+      }
+    }
+
+    if (this.selectedFiles.find(file => /tips/i.test(file)) && this.selectedFiles.find(file => /mqpl/i.test(file))) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   private hasDuplicateFiles(relatedFileName) {

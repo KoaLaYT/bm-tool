@@ -14,6 +14,9 @@ export class FileService {
     this.electronService.ipcRenderer.on('request', (event, info: string) => {
       this.progressInfo$.next(info);
     });
+    this.electronService.ipcRenderer.on('output', (event, info: string) => {
+      this.progressInfo$.next(info);
+    });
     this.electronService.ipcRenderer.on('draw', (event, info: string) => {
       this.drawingInfo$.next(info);
     });
@@ -37,6 +40,10 @@ export class FileService {
 
   public start(files: string[], path: string, PVSTime: string) {
     this.electronService.ipcRenderer.sendTo(2, 'request', files, path, PVSTime);
+  }
+
+  public output(files: string[], path: string) {
+    this.electronService.ipcRenderer.sendTo(2, 'output', files, path);
   }
 
   public draw(filePath, dateInfo) {

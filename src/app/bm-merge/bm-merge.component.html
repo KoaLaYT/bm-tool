@@ -43,6 +43,9 @@
   <button mat-raised-button color="primary" [disabled]="!projectFormControl.valid || !dateFormControl.valid || !isFileValid || isRunning" (click)="start()">
     对表
   </button>
+  <button mat-raised-button color="accent" [disabled]="isRunning || !isFileValidForOutput" (click)="output()">
+    导出
+  </button>
   <mat-progress-spinner color="warn" diameter="30" mode="indeterminate" *ngIf="isRunning"> </mat-progress-spinner>
   <p class="progress-info">{{ info }}</p>
 </section>
