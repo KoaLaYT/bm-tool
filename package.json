@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "app": "electron ."
+    "app": "electron .",
+    "pack": "electron-builder -w"
   },
   "private": true,
   "main": "index.js",
