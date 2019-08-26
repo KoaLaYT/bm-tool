@@ -1,134 +1,342 @@
 module.exports = {
-  Q3Soll2: (row) =>
-  `if(
-    X${row}="",
-    "",
-    if(
-    AY${row}="",
-    "",
-    if(
-      (right(X${row}, 2)+AY${row})>52,
-      (left(X${row}, 4)+1)&"-KW"&if(
-                                    (right(X${row}, 2)+AY${row}-52)<10,
-                                    "0"&(right(X${row}, 2)+AY${row}-52),
-                                    (right(X${row}, 2)+AY${row}-52)
-                                  ),
-      left(X${row}, 4)&"-KW"&if(
-                                (right(X${row}, 2)+AY${row})<10,
-                                "0"&(right(X${row}, 2)+AY${row}),
-                                (right(X${row}, 2)+AY${row})
-                              )
-    )
-    )
-  )`,
-  Q3Soll3: (row) =>
-  `if(
-    X${row}="",
-    "",
-    if(
-    AY${row}="",
-    "",
-    if(
-      (right(Y${row}, 2)+AY${row})>52,
-      (left(Y${row}, 4)+1)&"-KW"&if(
-                                    (right(Y${row}, 2)+AY${row}-52)<10,
-                                    "0"&(right(Y${row}, 2)+AY${row}-52),
-                                    (right(Y${row}, 2)+AY${row}-52)
-                                  ),
-      left(Y${row}, 4)&"-KW"&if(
-                                (right(Y${row}, 2)+AY${row})<10,
-                                "0"&(right(Y${row}, 2)+AY${row}),
-                                (right(Y${row}, 2)+AY${row})
-                              )
-    )
-    )
-  )`,
+  Q3Soll2: row =>
+    `if(
+      X${row}="",
+      "",
+      if(
+        AY${row}="",
+        "",
+        if(
+          AS${row}="",
+          if(
+            (right(X${row}, 2)+AY${row})>52,
+            (left(X${row}, 4)+1)&"-KW"&if(
+                                          (right(X${row}, 2)+AY${row}-52)<10,
+                                          "0"&(right(X${row}, 2)+AY${row}-52),
+                                          (right(X${row}, 2)+AY${row}-52)
+                                        ),
+            left(X${row}, 4)&"-KW"&if(
+                                      (right(X${row}, 2)+AY${row})<10,
+                                      "0"&(right(X${row}, 2)+AY${row}),
+                                      (right(X${row}, 2)+AY${row})
+                                    )
+          ),
+          if(
+            AT${row}="",
+            if(
+              (right(AS${row}, 2)+AY${row})>52,
+              (left(AS${row}, 4)+1)&"-KW"&if(
+                                            (right(AS${row}, 2)+AY${row}-52)<10,
+                                            "0"&(right(AS${row}, 2)+AY${row}-52),
+                                            (right(AS${row}, 2)+AY${row}-52)
+                                          ),
+              left(AS${row}, 4)&"-KW"&if(
+                                        (right(AS${row}, 2)+AY${row})<10,
+                                        "0"&(right(AS${row}, 2)+AY${row}),
+                                        (right(AS${row}, 2)+AY${row})
+                                      )
+            ),
+            if(
+              (right(AT${row}, 2)+AY${row})>52,
+              (left(AT${row}, 4)+1)&"-KW"&if(
+                                            (right(AT${row}, 2)+AY${row}-52)<10,
+                                            "0"&(right(AT${row}, 2)+AY${row}-52),
+                                            (right(AT${row}, 2)+AY${row}-52)
+                                          ),
+              left(AT${row}, 4)&"-KW"&if(
+                                        (right(AT${row}, 2)+AY${row})<10,
+                                        "0"&(right(AT${row}, 2)+AY${row}),
+                                        (right(AT${row}, 2)+AY${row})
+                                      )
+            )
+          )
+        )
+      )
+    )`,
+  Q3Soll3: row =>
+    `if(
+      X${row}="",
+      "",
+      if(
+        AY${row}="",
+        "",
+        if(
+          AS${row}="",
+          if(
+            (right(Y${row}, 2)+AY${row})>52,
+            (left(Y${row}, 4)+1)&"-KW"&if(
+                                          (right(Y${row}, 2)+AY${row}-52)<10,
+                                          "0"&(right(Y${row}, 2)+AY${row}-52),
+                                          (right(Y${row}, 2)+AY${row}-52)
+                                        ),
+            left(Y${row}, 4)&"-KW"&if(
+                                      (right(Y${row}, 2)+AY${row})<10,
+                                      "0"&(right(Y${row}, 2)+AY${row}),
+                                      (right(Y${row}, 2)+AY${row})
+                                    )
+          ),
+          if(
+            AT${row}="",
+            if(
+              (right(AS${row}, 2)+AY${row})>52,
+              (left(AS${row}, 4)+1)&"-KW"&if(
+                                            (right(AS${row}, 2)+AY${row}-52)<10,
+                                            "0"&(right(AS${row}, 2)+AY${row}-52),
+                                            (right(AS${row}, 2)+AY${row}-52)
+                                          ),
+              left(AS${row}, 4)&"-KW"&if(
+                                        (right(AS${row}, 2)+AY${row})<10,
+                                        "0"&(right(AS${row}, 2)+AY${row}),
+                                        (right(AS${row}, 2)+AY${row})
+                                      )
+            ),
+            if(
+              (right(AT${row}, 2)+AY${row})>52,
+              (left(AT${row}, 4)+1)&"-KW"&if(
+                                            (right(AT${row}, 2)+AY${row}-52)<10,
+                                            "0"&(right(AT${row}, 2)+AY${row}-52),
+                                            (right(AT${row}, 2)+AY${row}-52)
+                                          ),
+              left(AT${row}, 4)&"-KW"&if(
+                                        (right(AT${row}, 2)+AY${row})<10,
+                                        "0"&(right(AT${row}, 2)+AY${row}),
+                                        (right(AT${row}, 2)+AY${row})
+                                      )
+            )
+          )
+        )
+      )
+    )`,
   Q1Soll2: (row, pvsTime, PVSYear, PVSKW) =>
-  `if(
-    X${row}="",
-    "",
-    if(
-    BD${row}="",
-    "",
-    if(
-      (right(X${row}, 2)+BD${row})>52,
+    `if(
+      X${row}="",
+      "",
       if(
-        OR(
-          (left(X${row}, 4)+1)<${PVSYear},
-          AND(
-            (left(X${row}, 4)+1)=${PVSYear},
-            (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
+        BD${row}="",
+        "",
+        if(
+          AS${row}="",
+          if(
+            (right(X${row}, 2)+BD${row})>52,
+            if(
+              OR(
+                (left(X${row}, 4)+1)<${PVSYear},
+                AND(
+                  (left(X${row}, 4)+1)=${PVSYear},
+                  (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
+                )
+              ),
+              "${pvsTime}",
+              (left(X${row}, 4)+1)&"-KW"&if(
+                                            (right(X${row}, 2)+BD${row}-52)<10,
+                                            "0"&(right(X${row}, 2)+BD${row}-52),
+                                            (right(X${row}, 2)+BD${row}-52)
+                                          )
+            ),
+            if(
+              OR(
+                (left(X${row}, 4)+1)<${PVSYear},
+                AND(
+                  (left(X${row}, 4)+1)=${PVSYear},
+                  (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
+                )
+              ),
+              "${pvsTime}",
+              (left(X${row}, 4))&"-KW"&if(
+                                            (right(X${row}, 2)+BD${row})<10,
+                                            "0"&(right(X${row}, 2)+BD${row}),
+                                            (right(X${row}, 2)+BD${row})
+                                          )
+            )
+          ),
+          if(
+            AT${row}="",
+            if(
+              (right(AS${row}, 2)+BD${row})>52,
+              if(
+                OR(
+                  (left(AS${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AS${row}, 4)+1)=${PVSYear},
+                    (right(AS${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AS${row}, 4)+1)&"-KW"&if(
+                                              (right(AS${row}, 2)+BD${row}-52)<10,
+                                              "0"&(right(AS${row}, 2)+BD${row}-52),
+                                              (right(AS${row}, 2)+BD${row}-52)
+                                            )
+              ),
+              if(
+                OR(
+                  (left(AS${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AS${row}, 4)+1)=${PVSYear},
+                    (right(AS${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AS${row}, 4))&"-KW"&if(
+                                              (right(AS${row}, 2)+BD${row})<10,
+                                              "0"&(right(AS${row}, 2)+BD${row}),
+                                              (right(AS${row}, 2)+BD${row})
+                                            )
+              )
+            ),
+            if(
+              (right(AT${row}, 2)+BD${row})>52,
+              if(
+                OR(
+                  (left(AT${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AT${row}, 4)+1)=${PVSYear},
+                    (right(AT${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AT${row}, 4)+1)&"-KW"&if(
+                                              (right(AT${row}, 2)+BD${row}-52)<10,
+                                              "0"&(right(AT${row}, 2)+BD${row}-52),
+                                              (right(AT${row}, 2)+BD${row}-52)
+                                            )
+              ),
+              if(
+                OR(
+                  (left(AT${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AT${row}, 4)+1)=${PVSYear},
+                    (right(AT${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AT${row}, 4))&"-KW"&if(
+                                              (right(AT${row}, 2)+BD${row})<10,
+                                              "0"&(right(AT${row}, 2)+BD${row}),
+                                              (right(AT${row}, 2)+BD${row})
+                                            )
+              )
+            )
           )
-        ),
-        "${pvsTime}",
-        (left(X${row}, 4)+1)&"-KW"&if(
-                                      (right(X${row}, 2)+BD${row}-52)<10,
-                                      "0"&(right(X${row}, 2)+BD${row}-52),
-                                      (right(X${row}, 2)+BD${row}-52)
-                                    )
-      ),
-      if(
-        OR(
-          (left(X${row}, 4)+1)<${PVSYear},
-          AND(
-            (left(X${row}, 4)+1)=${PVSYear},
-            (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
-          )
-        ),
-        "${pvsTime}",
-        (left(X${row}, 4))&"-KW"&if(
-                                      (right(X${row}, 2)+BD${row})<10,
-                                      "0"&(right(X${row}, 2)+BD${row}),
-                                      (right(X${row}, 2)+BD${row})
-                                    )
+        )
       )
-    )
-    )
-  )`,
+    )`,
   Q1Soll3: (row, pvsTime, PVSYear, PVSKW) =>
-  `if(
-    X${row}="",
-    "",
-    if(
-    BD${row}="",
-    "",
-    if(
-      (right(Y${row}, 2)+BD${row})>52,
+    `if(
+      X${row}="",
+      "",
       if(
-        OR(
-          (left(X${row}, 4)+1)<${PVSYear},
-          AND(
-            (left(X${row}, 4)+1)=${PVSYear},
-            (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
+        BD${row}="",
+        "",
+        if(
+          AS${row}="",
+          if(
+            (right(Y${row}, 2)+BD${row})>52,
+            if(
+              OR(
+                (left(X${row}, 4)+1)<${PVSYear},
+                AND(
+                  (left(X${row}, 4)+1)=${PVSYear},
+                  (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
+                )
+              ),
+              "${pvsTime}",
+              (left(Y${row}, 4)+1)&"-KW"&if(
+                                            (right(Y${row}, 2)+BD${row}-52)<10,
+                                            "0"&(right(Y${row}, 2)+BD${row}-52),
+                                            (right(Y${row}, 2)+BD${row}-52)
+                                          )
+            ),
+            if(
+              OR(
+                (left(X${row}, 4)+1)<${PVSYear},
+                AND(
+                  (left(X${row}, 4)+1)=${PVSYear},
+                  (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
+                )
+              ),
+              "${pvsTime}",
+              (left(Y${row}, 4))&"-KW"&if(
+                                            (right(Y${row}, 2)+BD${row})<10,
+                                            "0"&(right(Y${row}, 2)+BD${row}),
+                                            (right(Y${row}, 2)+BD${row})
+                                          )
+            )
+          ),
+          if(
+            AT${row}="",
+            if(
+              (right(AS${row}, 2)+BD${row})>52,
+              if(
+                OR(
+                  (left(AS${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AS${row}, 4)+1)=${PVSYear},
+                    (right(AS${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AS${row}, 4)+1)&"-KW"&if(
+                                              (right(AS${row}, 2)+BD${row}-52)<10,
+                                              "0"&(right(AS${row}, 2)+BD${row}-52),
+                                              (right(AS${row}, 2)+BD${row}-52)
+                                            )
+              ),
+              if(
+                OR(
+                  (left(AS${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AS${row}, 4)+1)=${PVSYear},
+                    (right(AS${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AS${row}, 4))&"-KW"&if(
+                                              (right(AS${row}, 2)+BD${row})<10,
+                                              "0"&(right(AS${row}, 2)+BD${row}),
+                                              (right(AS${row}, 2)+BD${row})
+                                            )
+              )
+            ),
+            if(
+              (right(AT${row}, 2)+BD${row})>52,
+              if(
+                OR(
+                  (left(AT${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AT${row}, 4)+1)=${PVSYear},
+                    (right(AT${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AT${row}, 4)+1)&"-KW"&if(
+                                              (right(AT${row}, 2)+BD${row}-52)<10,
+                                              "0"&(right(AT${row}, 2)+BD${row}-52),
+                                              (right(AT${row}, 2)+BD${row}-52)
+                                            )
+              ),
+              if(
+                OR(
+                  (left(AT${row}, 4)+1)<${PVSYear},
+                  AND(
+                    (left(AT${row}, 4)+1)=${PVSYear},
+                    (right(AT${row}, 2)+BD${row}-52) <= ${PVSKW}
+                  )
+                ),
+                "${pvsTime}",
+                (left(AT${row}, 4))&"-KW"&if(
+                                              (right(AT${row}, 2)+BD${row})<10,
+                                              "0"&(right(AT${row}, 2)+BD${row}),
+                                              (right(AT${row}, 2)+BD${row})
+                                            )
+              )
+            )
           )
-        ),
-        "${pvsTime}",
-        (left(Y${row}, 4)+1)&"-KW"&if(
-                                      (right(Y${row}, 2)+BD${row}-52)<10,
-                                      "0"&(right(Y${row}, 2)+BD${row}-52),
-                                      (right(Y${row}, 2)+BD${row}-52)
-                                    )
-      ),
-      if(
-        OR(
-          (left(X${row}, 4)+1)<${PVSYear},
-          AND(
-            (left(X${row}, 4)+1)=${PVSYear},
-            (right(X${row}, 2)+BD${row}-52) <= ${PVSKW}
-          )
-        ),
-        "${pvsTime}",
-        (left(Y${row}, 4))&"-KW"&if(
-                                      (right(Y${row}, 2)+BD${row})<10,
-                                      "0"&(right(Y${row}, 2)+BD${row}),
-                                      (right(Y${row}, 2)+BD${row})
-                                    )
+        )
       )
-    )
-    )
-  )`,
-  Q3Dauer: (row) =>
-  `
+    )`,
+  Q3Dauer: row =>
+    `
   if(
     X${row}="",
     "",
@@ -151,8 +359,8 @@ module.exports = {
     )
   )
   `,
-  Q1Dauer: (row) =>
-  `
+  Q1Dauer: row =>
+    `
   if(
     X${row}="",
     "",
@@ -175,8 +383,8 @@ module.exports = {
     )
   )
   `,
-  FE54ia: (row) =>
-  `
+  FE54ia: row =>
+    `
   if(
     BZ${row}="",
     "",
@@ -187,8 +395,8 @@ module.exports = {
     )
   )
   `,
-  N3: (row) =>
-  `
+  N3: row =>
+    `
   if(
     BZ${row}="",
     if(
@@ -219,8 +427,8 @@ module.exports = {
     )
   )
   `,
-  N1: (row) =>
-  `
+  N1: row =>
+    `
   if(
     BZ${row}="",
     if(
