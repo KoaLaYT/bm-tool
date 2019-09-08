@@ -54,7 +54,9 @@ ipcRenderer.on('output', (event, files, path) => {
 
   const newTIPS = XLSX.utils.book_new();
   newTIPS.SheetNames.push(projectName);
-  newTIPS.Sheets[projectName] = XLSX.utils.json_to_sheet(TIPS, { skipHeader: true });
+  newTIPS.Sheets[projectName] = XLSX.utils.json_to_sheet(TIPS, {
+    skipHeader: true
+  });
 
   let postfix = new Date();
   postfix = postfix
@@ -140,6 +142,7 @@ ipcRenderer.on('request', (event, files, path, PVSTime) => {
         result.isNewTeile = true;
       } else {
         let QPNIRecords = QPNIMap.get(extendedTeileNum);
+        // QPNI有但MQPL没有
         if (!MQPL || !MQPLMap.has(extendedTeileNum)) {
           result.isNewTeile = false;
           result.QPNIOldRow = QPNIRecords[0];
@@ -207,8 +210,18 @@ ipcRenderer.on('request', (event, files, path, PVSTime) => {
     ) {
       mergedWB.Sheets['MQPL'][`AZ${row}`].f = functions.Q3Soll2(row);
       mergedWB.Sheets['MQPL'][`BA${row}`].f = functions.Q3Soll3(row);
-      mergedWB.Sheets['MQPL'][`BE${row}`].f = functions.Q1Soll2(row, PVSTime, PVSYear, PVSKW);
-      mergedWB.Sheets['MQPL'][`BF${row}`].f = functions.Q1Soll3(row, PVSTime, PVSYear, PVSKW);
+      mergedWB.Sheets['MQPL'][`BE${row}`].f = functions.Q1Soll2(
+        row,
+        PVSTime,
+        PVSYear,
+        PVSKW
+      );
+      mergedWB.Sheets['MQPL'][`BF${row}`].f = functions.Q1Soll3(
+        row,
+        PVSTime,
+        PVSYear,
+        PVSKW
+      );
       mergedWB.Sheets['MQPL'][`CD${row}`].f = functions.FE54ia(row);
       mergedWB.Sheets['MQPL'][`CJ${row}`].f = functions.N3(row);
       mergedWB.Sheets['MQPL'][`CK${row}`].f = functions.N1(row);
@@ -218,7 +231,9 @@ ipcRenderer.on('request', (event, files, path, PVSTime) => {
     }
   }
   // write archives
-  mergedWB.Sheets['MQPL存档'] = XLSX.utils.json_to_sheet(MQPLArchive, { header: MQPLHeader.map(data => data.title) });
+  mergedWB.Sheets['MQPL存档'] = XLSX.utils.json_to_sheet(MQPLArchive, {
+    header: MQPLHeader.map(data => data.title)
+  });
   mergedWB.Sheets['QPNI存档'] = XLSX.utils.json_to_sheet(QPNIFilterArchive);
   // write to the new fileName
   let postfix = new Date();
@@ -287,14 +302,21 @@ ipcRenderer.on('request', (event, files, path, PVSTime) => {
   function compareLieferanten(MQPLRecords, TIPSRecord, result) {
     for (let i = 0; i < MQPLRecords.length; i++) {
       let MQPLRecord = MQPL[MQPLRecords[i]];
-      if (MQPLRecord['Lieferanten-Code(3)'] == TIPSRecord['AD'] && MQPLRecord['CS供应商名称'] == TIPSRecord['AG']) {
-        result.isNewTeile = false;
-        result.MQPLOldRow = MQPLRecords[i];
-        return i;
-      }
+      // 不再比较供应商代码
+      /*
+      if (
+        MQPLRecord['Lieferanten-Code(3)'] == TIPSRecord['AD'] &&
+        MQPLRecord['CS供应商名称'] == TIPSRecord['AG']
+      )
+      */
+      result.isNewTeile = false;
+      result.MQPLOldRow = MQPLRecords[i];
+      return i;
     }
+    /*
     result.isNewTeile = true;
     return -1;
+    */
   }
 
   function extendsTeileNum(record, numProp, FKZProp) {
@@ -333,8 +355,14 @@ ipcRenderer.on('request', (event, files, path, PVSTime) => {
   function checkTeileSource(teile) {
     if (String(teile['V']) == 'LC2') {
       return 'LC2';
-    } else if (String(teile['A']) == 'ZP5' && (String(teile['V']) == 'LC' || String(teile['V']) == 'LC1')) {
-      if (String(teile['B'].startsWith('N')) || String(teile['B'].startsWith('WHT'))) {
+    } else if (
+      String(teile['A']) == 'ZP5' &&
+      (String(teile['V']) == 'LC' || String(teile['V']) == 'LC1')
+    ) {
+      if (
+        String(teile['B'].startsWith('N')) ||
+        String(teile['B'].startsWith('WHT'))
+      ) {
         // 标准件属于MQPL
         return 'MQPL';
       } else if (String(teile['B'].slice(3, 6) === '864')) {
