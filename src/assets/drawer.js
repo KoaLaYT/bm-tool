@@ -402,6 +402,7 @@ function renderYaxis(partsNum) {
   let sliceLine = 1;
   const jump = (Math.floor(partsNum / 100) + 1) * 20;
   const gap = ((YbeginPoint.y - YendPoint.y) / partsNum) * jump;
+  ctx.textAlign = 'right';
   while (YbeginPoint.y - sliceLine * gap > YendPoint.y) {
     ctx.strokeStyle = '#CCC';
     ctx.beginPath();
@@ -410,7 +411,6 @@ function renderYaxis(partsNum) {
     ctx.stroke();
     // 标注数量
     ctx.strokeStyle = '#000';
-    ctx.textAlign = 'right';
     ctx.fillText(
       `${sliceLine * jump}`,
       YbeginPoint.x - 2 * RATIO,
