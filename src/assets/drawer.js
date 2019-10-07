@@ -696,7 +696,7 @@ function calc__MLIA(MQPL, currentKW, type) {
           row['EM IST'] &&
           row['EM IST'] <= currentKW &&
           !row['N6 EM VSI'] &&
-          !row['Q3 IST']
+          (row['Q3 SOLL2'] > currentKW || !row['Q3 IST'])
         );
       }).length;
     case 'ZP5 Gesamt':
@@ -707,7 +707,7 @@ function calc__MLIA(MQPL, currentKW, type) {
           row['EM IST'] &&
           row['EM IST'] <= currentKW &&
           !row['N6 EM VSI'] &&
-          !row['Q3 IST']
+          (row['Q3 SOLL2'] > currentKW || !row['Q3 IST'])
         );
       }).length;
     case 'ZP5 KT':
@@ -720,7 +720,7 @@ function calc__MLIA(MQPL, currentKW, type) {
           row['EM IST'] &&
           row['EM IST'] <= currentKW &&
           !row['N6 EM VSI'] &&
-          !row['Q3 IST']
+          (row['Q3 SOLL2'] > currentKW || !row['Q3 IST'])
         );
       }).length;
     case 'ZP5 HT':
@@ -731,7 +731,7 @@ function calc__MLIA(MQPL, currentKW, type) {
           row['EM IST'] &&
           row['EM IST'] <= currentKW &&
           !row['N6 EM VSI'] &&
-          !row['Q3 IST']
+          (row['Q3 SOLL2'] > currentKW || !row['Q3 IST'])
         );
       }).length;
     case 'ZP5 ZSB':
@@ -742,7 +742,7 @@ function calc__MLIA(MQPL, currentKW, type) {
           row['EM IST'] &&
           row['EM IST'] <= currentKW &&
           !row['N6 EM VSI'] &&
-          !row['Q3 IST']
+          (row['Q3 SOLL2'] > currentKW || !row['Q3 IST'])
         );
       }).length;
   }
