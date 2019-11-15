@@ -580,7 +580,9 @@ function calc__AbgelEMT(MQPL, currentKW, type) {
           (row['ZP'] === 'ZP7' || row['ZP'] === 'ZP5A')
       ).filter(row => {
         return (
-          row['EM SOLL1'] && row['EM SOLL1'] <= currentKW && !row['EM IST']
+          row['EM SOLL1'] &&
+          row['EM SOLL1'] <= currentKW &&
+          (!row['EM IST'] || row['EM IST'] > currentKW)
         );
       }).length;
     case 'ZP5 Gesamt':
@@ -588,7 +590,9 @@ function calc__AbgelEMT(MQPL, currentKW, type) {
         row => row['Bezug'] !== 'CKD' && row['ZP'] === 'ZP5'
       ).filter(row => {
         return (
-          row['EM SOLL1'] && row['EM SOLL1'] <= currentKW && !row['EM IST']
+          row['EM SOLL1'] &&
+          row['EM SOLL1'] <= currentKW &&
+          (!row['EM IST'] || row['EM IST'] > currentKW)
         );
       }).length;
     case 'ZP5 KT':
@@ -598,7 +602,9 @@ function calc__AbgelEMT(MQPL, currentKW, type) {
           (row['Bezug'] === 'LC' || row['Bezug'] === 'LC1')
       ).filter(row => {
         return (
-          row['EM SOLL1'] && row['EM SOLL1'] <= currentKW && !row['EM IST']
+          row['EM SOLL1'] &&
+          row['EM SOLL1'] <= currentKW &&
+          (!row['EM IST'] || row['EM IST'] > currentKW)
         );
       }).length;
     case 'ZP5 HT':
@@ -606,7 +612,9 @@ function calc__AbgelEMT(MQPL, currentKW, type) {
         row => row['ZP'] === 'ZP5' && row['Bezug'] === 'HT'
       ).filter(row => {
         return (
-          row['EM SOLL1'] && row['EM SOLL1'] <= currentKW && !row['EM IST']
+          row['EM SOLL1'] &&
+          row['EM SOLL1'] <= currentKW &&
+          (!row['EM IST'] || row['EM IST'] > currentKW)
         );
       }).length;
     case 'ZP5 ZSB':
@@ -614,7 +622,9 @@ function calc__AbgelEMT(MQPL, currentKW, type) {
         row => row['ZP'] === 'ZP5' && row['Bezug'] === 'ZSB'
       ).filter(row => {
         return (
-          row['EM SOLL1'] && row['EM SOLL1'] <= currentKW && !row['EM IST']
+          row['EM SOLL1'] &&
+          row['EM SOLL1'] <= currentKW &&
+          (!row['EM IST'] || row['EM IST'] > currentKW)
         );
       }).length;
   }
